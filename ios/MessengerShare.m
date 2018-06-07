@@ -7,6 +7,7 @@
 //
 
 #import "MessengerShare.h"
+#import <FBSDKMessengerShareKit/FBSDKMessengerShareKit.h>
 
 @implementation MessengerShare
 - (void)shareSingle:(NSDictionary *)options
