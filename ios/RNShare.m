@@ -44,6 +44,7 @@
 #import "WhatsAppShare.h"
 #import "InstagramShare.h"
 #import "GooglePlusShare.h"
+#import "MessengerShare.h"
 #import "EmailShare.h"
 
 @implementation RNShare
@@ -84,6 +85,10 @@ RCT_EXPORT_METHOD(shareSingle:(NSDictionary *)options
         } else if([social isEqualToString:@"email"]) {
             NSLog(@"TRY OPEN email");
             EmailShare *shareCtl = [[EmailShare alloc] init];
+            [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback];
+        } else if([social isEqualToString:@"messenger"]) {
+            NSLog(@"TRY OPEN email");
+            MessengerShare *shareCtl = [[MessengerShare alloc] init];
             [shareCtl shareSingle:options failureCallback: failureCallback successCallback: successCallback];
         }
     } else {
