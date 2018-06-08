@@ -7,39 +7,41 @@
 //
 
 #import "MessengerShare.h"
-#import <FBSDKMessengerShareKit/FBSDKMessengerShareKit.h>
+#import <FBSDKShareKit/FBSDKShareKit.h>
+#import "FBMessengerShare.h"
+
 
 @implementation MessengerShare
 - (void)shareSingle:(NSDictionary *)options
     failureCallback:(RCTResponseErrorBlock)failureCallback
     successCallback:(RCTResponseSenderBlock)successCallback {
     
-    NSLog(@"Try open view");
+    
     
     if ([options objectForKey:@"message"] && [options objectForKey:@"message"] != [NSNull null]) {
-        NSString *text = [RCTConvert NSString:options[@"message"]];
-        text = [text stringByAppendingString: [@" " stringByAppendingString: options[@"url"]] ];
-        text = (NSString*)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(NULL,(CFStringRef) text, NULL,CFSTR("!*'();:@&=+$,/?%#[]"),kCFStringEncodingUTF8));
-        
-        NSString * urlMessenger = [NSString stringWithFormat:@"fb-messenger://share/?link=%@", text];
-        NSURL * messengerURL = [NSURL URLWithString:urlMessenger];
-        
-        if ([[UIApplication sharedApplication] canOpenURL: messengerURL]) {
-            [[UIApplication sharedApplication] openURL: messengerURL];
-            successCallback(@[]);
-        } else {
-            // Cannot open whatsapp
-            NSString *stringURL = @"https://itunes.apple.com/app/messenger/id454638411";
-            NSURL *url = [NSURL URLWithString:stringURL];
-            [[UIApplication sharedApplication] openURL:url];
-            
-            NSString *errorMessage = @"Not installed";
-            NSDictionary *userInfo = @{NSLocalizedFailureReasonErrorKey: NSLocalizedString(errorMessage, nil)};
-            NSError *error = [NSError errorWithDomain:@"com.rnshare" code:1 userInfo:userInfo];
-            
-            NSLog(errorMessage);
-            failureCallback(error);
-        }
+          dispatch_async(dispatch_get_main_queue(), ^{
+              NSString *message = [RCTConvert NSString:options[@"message"]];
+              NSString *url = [RCTConvert NSString:options[@"url"]];
+              NSString *appId = [RCTConvert NSString:options[@"appId"]];
+    FBSDKShareMessengerURLActionButton *urlButton = [[FBSDKShareMessengerURLActionButton alloc] init];
+    urlButton.title = message;
+    urlButton.url = [NSURL URLWithString:url];
+    
+    FBSDKShareMessengerGenericTemplateElement *element = [[FBSDKShareMessengerGenericTemplateElement alloc] init];
+    element.title = url;
+    element.button = urlButton;
+    
+    FBSDKShareMessengerGenericTemplateContent *content = [[FBSDKShareMessengerGenericTemplateContent alloc] init];
+    content.pageID = appId;
+    content.element = element;
+    
+    FBSDKMessageDialog *messageDialog = [[FBSDKMessageDialog alloc] init];
+    messageDialog.shareContent = content;
+    
+    if ([messageDialog canShow]) {
+      [messageDialog show];
+    }
+  });
     }
     
 }
