@@ -8,7 +8,6 @@
 
 #import "MessengerShare.h"
 #import <FBSDKShareKit/FBSDKShareKit.h>
-#import "FBMessengerShare.h"
 
 
 @implementation MessengerShare
