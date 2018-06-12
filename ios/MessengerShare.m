@@ -40,6 +40,10 @@
     
     if ([messageDialog canShow]) {
       [messageDialog show];
+    } else {
+        NSString *stringURL = @"https://itunes.apple.com/app/messenger/id454638411";
+        NSURL *url = [NSURL URLWithString:stringURL];
+        [[UIApplication sharedApplication] openURL:url];
     }
   });
     }
