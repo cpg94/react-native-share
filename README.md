@@ -1,7 +1,7 @@
 ﻿# react-native-share [![npm version](https://badge.fury.io/js/react-native-share.svg)](http://badge.fury.io/js/react-native-share)
 Share Social , Sending Simple Data to Other Apps
 
-***This is a forked version of react-native-share. Added the functionality to share to facebook messenger on ios***
+***This is a forked version of react-native-share. Added the functionality to share to facebook messenger***
 
 ***NOTE: React Native now implements share functionality [Read more](https://facebook.github.io/react-native/docs/share.html)***
 
